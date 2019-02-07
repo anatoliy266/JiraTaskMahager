@@ -48,8 +48,8 @@
                 <TextBox Height="20" Grid.Row="1" Margin="2" Width="150" x:Name="LoginInput">
                 </TextBox>
                 <Label Grid.Row="2" Content="Password" HorizontalAlignment="Center"  Margin="2"/>
-                <PasswordBox Height="20" Grid.Row="3" Margin="2" Width="150" x:Name="PwdInput" PasswordChar="*">
-                </PasswordBox>
+                <TextBox Height="20" Grid.Row="3" Margin="2" Width="150" x:Name="PwdInput">
+                </TextBox>
                 <Button Grid.Row="4" Content="LogIn" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="200" Margin="5" x:Name="LoginButton" Click="LoginButton_Click" />
             </Grid>
         </Grid>

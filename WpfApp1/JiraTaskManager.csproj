@@ -66,6 +66,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HipChatConnector.cs" />
     <Compile Include="SearchIssues.cs" />
     <Compile Include="JiraConnector.cs" />
     <Compile Include="MainWindow.xaml.cs">

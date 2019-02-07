@@ -80,13 +80,12 @@ namespace WpfApp1
 
         private string Get(RestApiPart restApiMethod, RequestMethod method, NameValueCollection fields = null, string filter = null, int maxCount = 1, int startAt = 0)
         {
-            CookieContainer cookie = new CookieContainer();
-            WebProxy proxy = new WebProxy(GUrl);
-            string url = GUrl;
             //string userAgent = "Mozilla / 5.0(Windows NT 6.1; WOW64; rv: 17.0) Gecko / 20100101 Firefox / 17.0";
-            string userAgent = "King Anthony";
+            //string accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+
+            CookieContainer cookie = new CookieContainer();
+            string url = GUrl;
             string basicAuth = BasicAuth;
-            string accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
             string data = "";
             try
             {
@@ -127,48 +126,20 @@ namespace WpfApp1
                             url += "";
                         }
                         url += "startAt=" + startAt.ToString() + "&maxResults=" + maxCount.ToString();
+
+                        url = "https://jira.550550.ru/rest/api/2/issue/1087220";
                         break;
                 }
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                request.UserAgent = userAgent;
-                request.Accept = accept;
-                request.Headers.Add("Authorization", "Basic " + BasicAuth);
-                request.Headers.Add("DNT", "1");
-                request.CookieContainer = cookie;
-                request.KeepAlive = false;
-                switch (method) {
-                    case RequestMethod.GET:
-                        request.Method = "GET";
-                        break;
-                    case RequestMethod.POST:
-                        request.Method = "POST";
-                        StreamWriter writer = new StreamWriter(request.GetRequestStream());
-                        writer.Write(data);
-                        break;
-                    case RequestMethod.DELETE:
-                        request.Method = "DELETE";
-                        break;
-                }
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                Stream responseStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(responseStream);
-                string text = reader.ReadToEnd();
-                return text;
+                WebClient request = new WebClient();
+                request.Headers.Add(HttpRequestHeader.Authorization, "Basic " + BasicAuth);
+                request.Headers.Add(HttpRequestHeader.KeepAlive, "false");
+                request.Headers.Add(HttpRequestHeader.UserAgent, "King_Anthony");
+                request.Headers.Add(HttpRequestHeader.Accept, "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                byte[] text =  request.DownloadData(new Uri(url));
+                return Encoding.ASCII.GetString(text);
             } catch (Exception e)
             {
-                if (e.Message.Contains("401"))
-                {
-                    return "JiraConnector::Get -> Unauthorized(401), ";
-                } else if (e.Message.Contains("Закрыто"))
-                {
-                    return "JiraConnector::Get -> Connection Close";
-                } else if (e.Message.Contains("403"))
-                {
-                    return "JiraConnector::Get -> Permission denied";
-                } else
-                {
-                    return "JiraConnector::Get ->" + e.Message;
-                }
+                return "JiraConnector::Get ->" + e.Message;
             }
         }
 
@@ -176,7 +147,9 @@ namespace WpfApp1
         {
             try
             {
-                BasicAuth = Convert.ToBase64String(Encoding.ASCII.GetBytes(userName + ":" + pwd));
+                //BasicAuth = Convert.ToBase64String(Encoding.ASCII.GetBytes(userName + ":" + pwd));
+                BasicAuth = Convert.ToBase64String(UTF8Encoding.UTF8.GetBytes(userName + ":" + pwd));
+                
             } catch (Exception e)
             {
                 DebugText = "JiraConnector::Auth ->" + e.Message;
@@ -193,7 +166,7 @@ namespace WpfApp1
                 switch (type)
                 {
                     case SearchType.myIssues:
-                        filter = string.Join("%20", "assignee in (CurrentUser()) order by updated asc".Split(" ".ToCharArray()));
+                        filter = string.Join("%20", "assignee in (currentUser()) and status not in (\"Waiting reporter\", DONE) order by updated asc".Split(" ".ToCharArray()));
                         break;
                     case SearchType.callCenter:
                         filter = string.Join("%20", "project = HD AND status = \"To Do\" AND reporter in (s.tranzit) and assignee in(fk.support) order by updated asc".Split(" ".ToCharArray()));

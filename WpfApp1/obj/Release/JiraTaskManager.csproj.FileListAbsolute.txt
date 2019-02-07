@@ -14,3 +14,4 @@ C:\Users\a.stanevich\source\repos\WpfApp1\WpfApp1\obj\Release\JiraTaskManager.cs
 C:\Users\a.stanevich\source\repos\WpfApp1\WpfApp1\obj\Release\JiraTaskManager.csproj.CopyComplete
 C:\Users\a.stanevich\source\repos\WpfApp1\WpfApp1\obj\Release\WpfApp1.exe
 C:\Users\a.stanevich\source\repos\WpfApp1\WpfApp1\obj\Release\WpfApp1.pdb
+C:\Users\a.stanevich\source\repos\WpfApp1\WpfApp1\obj\Release\JiraTaskManager.csprojAssemblyReference.cache

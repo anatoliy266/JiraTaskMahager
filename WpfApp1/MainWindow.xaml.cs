@@ -20,21 +20,21 @@ namespace WpfApp1
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
+
+
     
-
-
 
     public partial class MainWindow : Window
     {
+        private JiraConnector jira;
+        HipChatConnector hipChatConnector = new HipChatConnector();
+
         public MainWindow()
         {
             jira = new JiraConnector("jira.550550.ru", ProtocolType.HTTPS);
-            
             InitializeComponent();
         }
 
-        private JiraConnector jira;
-        
         private Grid GenerateIssueItem(int i, SearchIssues.RootSearchIssueObject issuesObject)
         {
             var issue = issuesObject.issues[i];
@@ -91,12 +91,21 @@ namespace WpfApp1
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            jira.Auth(LoginInput.Text, PwdInput.Password);
-            debugText.TextWrapping = TextWrapping.Wrap;
-            debugText.Text = jira.DebugText;
-            loginGrid.Visibility = Visibility.Hidden;
-            generalTabControl.Visibility = Visibility.Visible;
-            
+            try
+            {
+                jira.Auth(LoginInput.Text, PwdInput.Text);
+                debugText.TextWrapping = TextWrapping.Wrap;
+                debugText.Text = jira.DebugText;
+                loginGrid.Visibility = Visibility.Hidden;
+                generalTabControl.Visibility = Visibility.Visible;
+                HipChatConnector hipChatConnector = new HipChatConnector();
+                var hipchatUser = LoginInput.Text + "@550550.ru";
+                hipChatConnector.SendMessage(hipchatUser, "Сообщение", "Я слежу за тобой...");
+                hipChatConnector = null;
+            } catch (Exception ex)
+            {
+                debugText.Text = ex.Message;
+            }
         }
 
         private void GeneralTabControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -120,12 +129,13 @@ namespace WpfApp1
             string issueObjectText = "";
             try
             {
+                
                 if (generalTabControl.Visibility == Visibility.Visible)
                 {
                     issueObjectText = jira.getIssues(SearchType.myIssues);
                     if (issueObjectText.Contains("->"))
                     {
-                        debugText.Text = "MyTasks Exception -> "+issueObjectText;
+                        debugText.Text = "MyTasks Exception -> "+issueObjectText + jira.DebugText;
                     }
                     else
                     {
