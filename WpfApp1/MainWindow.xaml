@@ -1,0 +1,57 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="Jira Task Manager" Height="450" Width="800">
+    <Grid x:Name="generalGrid" x:Uid="g_grid" Visibility="Visible">
+        <TabControl x:Name="generalTabControl" Margin="10" Visibility="Hidden" IsVisibleChanged="GeneralTabControl_IsVisibleChanged">
+            <TabItem x:Name="myTasks" Selector.Selected ="MyTasks_Selected">
+                <TabItem.Header>
+                    "Назначенные мне"
+                </TabItem.Header>
+            </TabItem>
+            <TabItem x:Name="callCenter" Selector.Selected="CallCenter_Selected">
+                <TabItem.Header>
+                    "Задачи от секретарши :)"
+                </TabItem.Header>
+            </TabItem>
+            <TabItem x:Name="hotLine" Selector.Selected="HotLine_Selected">
+                <TabItem.Header>
+                    "Горячая линия"
+                </TabItem.Header>
+            </TabItem>
+            <TabItem x:Name="voiceMail" Selector.Selected="VoiceMail_Selected">
+                <TabItem.Header>
+                    "Голосовые сообщения"
+                </TabItem.Header>
+            </TabItem>
+        </TabControl>
+        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Margin="10" Text="debugText" x:Name="debugText" />
+        <Grid x:Name="loginGrid" Margin="10">
+            <Grid HorizontalAlignment="Center" 
+                  VerticalAlignment="Center"
+                  Width="300"
+                  Height="150"
+                  Background="Silver"
+                  >
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="Login" HorizontalAlignment="Center" Margin="2"/>
+                <TextBox Height="20" Grid.Row="1" Margin="2" Width="150" x:Name="LoginInput">
+                </TextBox>
+                <Label Grid.Row="2" Content="Password" HorizontalAlignment="Center"  Margin="2"/>
+                <PasswordBox Height="20" Grid.Row="3" Margin="2" Width="150" x:Name="PwdInput" PasswordChar="*">
+                </PasswordBox>
+                <Button Grid.Row="4" Content="LogIn" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="200" Margin="5" x:Name="LoginButton" Click="LoginButton_Click" />
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
